@@ -1,0 +1,225 @@
+#mydialog { 
+  display:none 
+}
+
+body {
+font-family: Verdana, sans-serif;
+}
+
+table {
+  width: 100%;
+}
+
+.calendar__title {
+padding: 70px 25px;
+width: 100%;
+background: #1abc9c;
+text-align: center;
+font-size: 35px;
+margin-bottom:0;
+}
+
+.calendar--view {
+margin: 0;
+padding: 10px 0;
+}
+
+
+input{
+  border-radius: 4px;
+}
+
+
+
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: left;
+}
+
+th {
+  height: 25px;
+  width: 14%;
+}
+
+td {
+  height: 50px;
+  width: 14%;
+}
+
+/* tr:nth-child(even) {
+background-color:#F3E0BE; 
+} */
+
+.open-button,.open-button2{
+  background-color: #3498DB;
+  color: white;
+  /* padding: 16px; */
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  
+}
+
+#logout_btn,#login_btn,#reg_btn{
+  background-color: #3498DB;
+  color: white;
+  /* padding: 16px; */
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  
+}
+
+.prevButton,.nextButton{
+  background-color: #3498DB;
+  color: white;
+  /* padding: 16px; */
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+
+}
+
+
+#addEventBtn{
+  background-color: #3498DB;
+  color: white;
+  /* padding: 16px; */
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+
+
+}
+
+
+
+#addCancel,#addEventBtn,#editCancel,#editEventBtn,#shareEventBtn,#shareEventCancel{
+
+  background-color: #3498DB;
+  color: white;
+  /* padding: 16px; */
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+
+}
+
+
+
+
+
+
+.editdropbtn {
+background-color: #3498DB;
+color: white;
+/* padding: 16px; */
+font-size: 16px;
+border: none;
+cursor: pointer;
+border-radius: 4px;
+}
+
+.editdropbtn:hover, .dropbtn:focus {
+background-color: #2980B9;
+}
+
+.deldropbtn {
+background-color: #3498DB;
+color: white;
+/* padding: 16px; */
+font-size: 16px;
+border: none;
+cursor: pointer;
+border-radius: 4px;
+}
+
+.sharedropbtn{
+  background-color: #3498DB;
+color: white;
+/* padding: 16px; */
+font-size: 16px;
+border: none;
+cursor: pointer;
+border-radius: 4px;
+
+}
+
+.sharedropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+  }
+
+
+
+.deldropbtn:hover, .dropbtn:focus {
+background-color: #2980B9;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+background-color: #2980B9;
+}
+
+.dropdown {
+position: relative;
+display: inline-block;
+}
+
+.dropdown-content {
+display: none;
+position: absolute;
+background-color: #f1f1f1;
+width: auto;
+white-space: nowrap;
+overflow: auto;
+/* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1; */
+}
+
+.dropdown-content2{
+display: none;
+position: absolute;
+background-color: #f1f1f1;
+width: auto;
+white-space: nowrap;
+overflow: auto;
+}
+
+.dropdown-content p {
+color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+}
+
+.dropdown-content2 p{
+  color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+}
+
+.dropdown p:hover {background-color: #ddd;}
+
+.dropdown-content text {
+color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+}
+
+.dropdown-content2 text{
+  color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+}
+
+.dropdown text:hover {background-color: #ddd;}
+
+.show {display: block;}

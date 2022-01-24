@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather widget</title>
+
+
+    <link href="https://classes.engineering.wustl.edu/cse330/content/weather.css" rel="stylesheet">	
+
+
+ <!-- fetcherweather function    -->
+<script>
+    function fetchWeather(){
+        fetch(' https://classes.engineering.wustl.edu/cse330/content/weather_json.php')
+        .then(function(response) {
+
+            return response.json();
+        })
+        // display data onto html page
+        .then(
+            function(stuff) {
+
+               // alert(JSON.stringify(stuff)); ///worked 
+                
+               
+             var jsonData = JSON.parse(JSON.stringify(stuff));
+
+            // ///assign data to variables
+            // var time=jsonData.updated;
+             var city=jsonData.location.city;
+             var state=jsonData.location.state;
+             var humidity=jsonData.atmosphere.humidity;
+             var curTemp=jsonData.current.temp;
+             var tmrwCode=jsonData.tomorrow.code;
+             var daCode=jsonData.dayafter.code;
+            // var chill=jsonData.wind.chill;
+            // var direction=jsonData.wind.direction;
+            // var speed=jsonData.wind.speed;
+            // var visibility=jsonData.atmosphere.visibility;
+            // var pressure=jsonData.atmosphere.pressure;
+            // var curCode=jsonData.current.code;
+            // var curText=jsonData.current.text;
+            // var curDate=jsonData.current.date;
+            // var tmrwText=jsonData.tomorrow.text;
+            // var tmrwLow=jsonData.tomorrow.low;
+            // var tmrwHigh=jsonData.tomorrow.high;
+            // var daText=jsonData.dayafter.text;
+            // var daLow=jsonData.dayafter.low;
+            // var daHigh=jsonData.dayafter.high;
+            // var credit=jsonData.credit
+            // const newStrong = document.createElement("STRONG");  
+            // newStrong.appendChild(document.createTextNode("love"));
+            // document.getElementByClassName("weather-loc").appendChild(newStrong);
+            
+             document.getElementsByClassName("weather-loc")[0].innerHTML="<strong>"+city+"</strong>"+"<br>"+state;
+             document.getElementsByClassName("weather-humidity")[0].innerHTML=humidity;
+             document.getElementsByClassName("weather-temp")[0].innerHTML=curTemp;
+             var tmrwlink="http://us.yimg.com/i/us/nws/weather/gr/"+tmrwCode+"ds.png";
+             document.getElementsByClassName("weather-tomorrow")[0].setAttribute("src",tmrwlink);
+             var nextlink="http://us.yimg.com/i/us/nws/weather/gr/"+daCode+"ds.png";
+             document.getElementsByClassName("weather-dayaftertomorrow")[0].setAttribute("src",nextlink);
+             
+
+        }
+        
+        
+        )
+        .catch(error => console.error('Error:',error))
+
+
+
+    }
+
+
+</script>
+ 
+
+
+
+
+
+</head>
+<body>
+       
+    <h2> The Weather Channel </h2>
+
+        <div class="weather" id="weatherWidget">
+                <div class="weather-loc"> </div>
+                <div class="weather-humidity"></div>
+                <div class="weather-temp"></div>
+                <img class="weather-tomorrow" />
+                <img class="weather-dayaftertomorrow" />
+                <button type="button" id="checkWeather"> Check Weather  </button>   
+            </div>
+
+<script>
+        document.getElementById("checkWeather").addEventListener("click",fetchWeather,false);
+
+
+</script>
+
+
+
+
+
+    
+</body>
+</html>

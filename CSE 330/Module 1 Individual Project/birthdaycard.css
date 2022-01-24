@@ -1,0 +1,47 @@
+body{
+    background-color:lemonchiffon;
+    
+    }
+    
+    
+    
+    h1{
+        text-align:center;
+        color:chocolate;
+        font-family:Comic Sans MS;
+        font-size:50px;
+        text-shadow:5px 2px blue;
+        
+    
+    }
+    h3{
+        color:darkred;
+        font-family:Impact;
+        font-size:30px;
+        text-align:center;
+    
+    
+    
+    }
+    
+    .author{
+        font-family:Comic Sans MS;
+        font-size:30px;
+        color:Lightsalmon;
+        text-align:right;
+        
+    
+    
+    }
+    
+    
+    div{
+        
+        background-color:lightcyan;
+        width:500px;
+        border: 10px solid orange ;
+        padding:50px;
+        margin:300px;
+    }
+    
+    

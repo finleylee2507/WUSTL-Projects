@@ -1,0 +1,82 @@
+header { 
+  text-align: center;
+  font-family: 'ltc-bodoni-175';
+	text-transform: uppercase;
+  font-size: 45px;
+  font-weight: 400;
+  color: #333; 
+  padding-bottom: 15px; 
+}  
+body {
+	background: #eee3c8;
+}
+#login {
+  position: absolute;
+  top: 1%;
+  left: 95%;
+}
+#register {
+  position: absolute;
+  top: 1%;
+  left: 89%;
+}
+
+#logged {
+  position: absolute;
+  top: 1%;
+  left: 82%;
+}
+
+#substory {
+  position: absolute;
+  top: 3.5%;
+  left: 3%;
+}
+
+#logout {
+  position: absolute;
+  top: 0.6%;
+  left: 94%;
+}
+
+input[type=text] {
+  padding:5px; 
+  border:2px solid #ccc; 
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+input[type=text]:focus {
+  border-color:#333;
+}
+
+input[type=submit] {
+  padding:5px 15px; 
+  background:#ccc; 
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px; 
+}
+
+button {
+  padding:5px 15px; 
+  background:#ccc; 
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.text-block{
+  font-size: 25px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.invisibutton{
+  height: 1px;
+  width: 1px;
+  display: none;
+  vertical-align: text-bottom;
+}

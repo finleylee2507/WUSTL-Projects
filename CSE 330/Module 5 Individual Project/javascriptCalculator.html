@@ -1,0 +1,117 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The Javascript Calculator</title>
+
+
+    <!-- Method for calculator -->
+    <script>
+        function algorithm() {
+            const firstNumber = document.getElementById('firstnumberinput').value;
+            const secondNumber = document.getElementById('secondnumberinput').value;
+
+            // validate input
+            // if (firstNumber == "" || secondNumber == "") {
+            //     alert("Please enter numbers for computation. After entering the number, click the operator again");
+            // }
+
+
+
+            //compute 
+
+            if (document.getElementById("plus").checked) {
+                let result = parseInt(firstNumber, 10) + parseInt(secondNumber, 10);
+                document.getElementById("result").innerHTML = "The result is " + result;
+
+            }
+
+            if (document.getElementById("minus").checked) {
+                let result = parseInt(firstNumber, 10) - parseInt(secondNumber, 10);
+                document.getElementById("result").innerHTML = "The result is " + result;
+
+            }
+
+            if (document.getElementById("multiply").checked) {
+                let result = parseInt(firstNumber, 10) * parseInt(secondNumber, 10);
+                document.getElementById("result").innerHTML = "The result is " + result;
+
+            }
+            if (document.getElementById("divide").checked) {
+                if (secondNumber == "0") {
+                    alert("Error: cannot divide a number by 0")
+                }
+                else {
+                    let result = parseInt(firstNumber, 10) / parseInt(secondNumber, 10);
+                    document.getElementById("result").innerHTML = "The result is " + result;
+
+                }
+
+
+            }
+
+
+
+
+
+        }
+
+    </script>
+
+
+
+</head>
+
+<body>
+    <h2>Free Online Calculator</h2>
+
+    <form>
+        <label for="firstnumberinput">First number: </label>
+        <input type="number" name="firstnumber" id="firstnumberinput" step="any">
+        <br>
+
+
+
+
+        <label for="secondnumberinput">Second number:</label>
+        <input type="number" name="secondnumber" id="secondnumberinput" step="any">
+        <br>
+
+        Select operations:
+        <input type="radio" name="operation" value="plus" id="plus"><label for="plus">Plus </label>
+        <input type="radio" name="operation" value="minus" id="minus"><label for="minus">Minus </label>
+        <input type="radio" name="operation" value="multiply" id="multiply"><label for="multiply">Multiply </label>
+        <input type="radio" name="operation" value="divide" id="divide"><label for="divide">Divide </label> <br>
+
+        <!-- <input type="submit" id ="submitButton" value="Calculate"/> -->
+        <input type="reset">
+
+
+    </form>
+
+    <p id="result"> </p>
+
+
+
+    <!-- javascript event listener -->
+    <script>
+
+
+        document.getElementById("firstnumberinput").addEventListener("keyup", algorithm, false);
+        document.getElementById("secondnumberinput").addEventListener("keyup", algorithm, false);
+
+        document.getElementById("plus").addEventListener("click", algorithm, false);
+        document.getElementById("minus").addEventListener("click", algorithm, false);
+        document.getElementById("multiply").addEventListener("click", algorithm, false);
+        document.getElementById("divide").addEventListener("click", algorithm, false);
+
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat Room</title>
+    <style>
+        body {
+            background-color: #89cff0;
+        }
+        
+        p,
+        li,
+        header {
+            color: #000000;
+            font-size: 20px;
+        }
+        
+        #container {
+            font-size: 20px;
+        }
+        /* Citation: https://www.w3schools.com/css/css_form.asp */
+        
+        input[type=text],
+        input[type=password],
+        select {
+            padding: 10px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid rgb(0, 0, 0);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: rgb(253, 216, 6);
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            margin: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: rgb(253, 216, 6);
+        }
+        /* End Citation */
+        
+        a {
+            color: black;
+        }
+        
+        #username_input {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #loginBtn {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let currentRoom = "";
+        let roomUsers = [];
+        let currentUser = "";
+        var socketio = io.connect();
+        socketio.on("message_to_client", function(data) {
+            //Append an HR thematic break and the escaped HTML of the new message
+            document.getElementById("chatlog").appendChild(document.createElement("hr"));
+            document.getElementById("chatlog").appendChild(document.createTextNode(`${data["user"]}: ${data["message"]}`));
+            document.getElementById("chatlog").appendChild(document.createElement("br"));
+            document.getElementById("chatlog").appendChild(document.createTextNode(`${data["time"]}`));
+            document.getElementById("chatlog").innerHTML += "<br>";
+            console.log("New Message: ", data["user"], data["message"], data["time"]);
+        });
+
+        //Send an alert that a new user has joined
+        socketio.on("newUser", function(data) {
+            document.getElementById("chatlog").appendChild(document.createElement("hr"));
+            document.getElementById("chatlog").appendChild(document.createTextNode(`${data["user"]} has joined.`));
+            document.getElementById("chatlog").innerHTML += "<br>";
+        })
+
+        ///Send an alert that a user has left 
+        socketio.on("userLeft", function(data) {
+            document.getElementById("chatlog").appendChild(document.createElement("hr"));
+            document.getElementById("chatlog").appendChild(document.createTextNode(`${data["user"]} has left.`));
+            document.getElementById("chatlog").innerHTML += "<br>";
+
+        })
+
+        //List all the rooms
+        socketio.on("roomList", function(data) {
+            document.getElementById("roomList").innerHTML = ''; //clear previous so we don't see repeats 
+            ///iterate through the room array 
+            for (let i = 0; i < data["keySet"].length; i++) {
+                ///for each room name, create a button with room name so when clicked, user can join the room
+                if (data["rooms"][data["keySet"][i]].length != 0) {
+                    if (!data["rooms"][data["keySet"][i]][0].includes("Password:")) {
+                        let roomName = document.createElement("button");
+                        roomName.innerHTML = `Join: ${data["keySet"][i]}`;
+                        roomName.setAttribute("id", data["keySet"][i]);
+                        document.getElementById("roomList").appendChild(roomName);
+                        document.getElementById("roomList").innerHTML += '<br>';
+                    } else {
+                        let roomName = document.createElement("button");
+                        roomName.innerHTML = `Join Private Room: ${data["keySet"][i]}`;
+                        roomName.setAttribute("id", data["keySet"][i]);
+                        document.getElementById("roomList").appendChild(roomName);
+                        document.getElementById("roomList").innerHTML += '<br>';
+                    }
+                } else {
+                    let roomName = document.createElement("button");
+                    roomName.innerHTML = `Join: ${data["keySet"][i]}`;
+                    roomName.setAttribute("id", data["keySet"][i]);
+                    document.getElementById("roomList").appendChild(roomName);
+                    document.getElementById("roomList").innerHTML += '<br>';
+                }
+            }
+
+            //Add event listener to join a room
+            for (let i = 0; i < data["keySet"].length; i++) {
+                if (data["rooms"][data["keySet"][i]].length != 0) {
+                    if (!data["rooms"][data["keySet"][i]][0].includes("Password:")) {
+                        document.getElementById(data["keySet"][i]).addEventListener("click", function() {
+                            let userName = document.getElementById("username_input").value;
+                            currentUser = userName;
+                            let roomName = data["keySet"][i];
+                            socketio.emit("joinRoom", {
+                                room: roomName,
+                                user: userName
+                            })
+                        })
+                    } else {
+                        document.getElementById(data["keySet"][i]).addEventListener("click", function() {
+                            let userPass = prompt("Enter Password");
+                            let strLength = data["rooms"][data["keySet"][i]][0].length;
+                            if (userPass == data["rooms"][data["keySet"][i]][0].substring(9, strLength)) {
+                                let userName = document.getElementById("username_input").value;
+                                currentUser = userName;
+                                let roomName = data["keySet"][i];
+                                socketio.emit("joinRoom", {
+                                    room: roomName,
+                                    user: userName
+                                })
+                            } else {
+                                alert("Incorrect Password");
+                            }
+                        })
+                    }
+                } else {
+                    document.getElementById(data["keySet"][i]).addEventListener("click", function() {
+                        let userName = document.getElementById("username_input").value;
+                        currentUser = userName;
+                        let roomName = data["keySet"][i];
+                        socketio.emit("joinRoom", {
+                            room: roomName,
+                            user: userName
+                        })
+                    })
+                }
+            }
+        })
+
+        //after a user receives a fail_to_join message (after banned) 
+        socketio.on("fail_to_join", function(data) {
+            if (currentUser == data['user']) {
+                document.getElementById("userList").style.display = "none";
+                document.getElementById("leaveRoomContainer").style.display = "none";
+                document.getElementById("chatContainer").style.display = "none";
+                document.getElementById("roomList").style.display = "inline";
+                alert("You're banned from joining this room :(");
+                status = 0;
+            }
+        })
+
+        //after a user receives a join_sucess message
+        socketio.on("join_success", function(data) {
+            document.getElementById("roomList").style.display = "none";
+            document.getElementById("createRoomContainer").style.display = "none";
+            document.getElementById("createPrivateRoomContainer").style.display = "none";
+            document.getElementById("chatContainer").style.display = "inline";
+            document.getElementById("leaveRoomContainer").style.display = "inline";
+            document.getElementById("userList").style.display = "inline";
+            currentRoom = data['roomName'];
+        })
+
+        //Lists users in the room 
+        socketio.on("userList", function(data) {
+            document.getElementById("userList").style.display = "inline";
+            document.getElementById("userlist").innerHTML = '';
+            //interate through the user array 
+            for (let i = 0; i < data["users"].length; i++) {
+                let userName = document.createElement("li");
+                if (data["users"][i] == data["creator"]) {
+                    userName.innerHTML = data["users"][i] + "(Creator)";
+                    if (data["users"][i] != currentUser) {
+                        userName.innerHTML += `<button id="dm${data["users"][i]}" type="submit" onclick="sendDM(this.id)">Direct Message</button>`;
+                        userName.innerHTML += `<button id="mt${data["users"][i]}" type="submit" onclick="mute(this.id)">Mute</button>`;
+                    }
+                } else {
+                    userName.innerHTML = data["users"][i];
+                    if (data["users"][i] != currentUser) {
+                        userName.innerHTML += `<button id="dm${data["users"][i]}" type="submit" onclick="sendDM(this.id)">Direct Message</button>`;
+                        userName.innerHTML += `<button id="mt${data["users"][i]}" type="submit" onclick="mute(this.id)">Mute</button>`;
+                    }
+                }
+                if (!data["users"][i].includes("Password:")) {
+                    document.getElementById("userlist").appendChild(userName);
+                    //set kick and ban button for other users 
+                    if (data["users"][i] != currentUser) {
+                        if (data["creator"] == currentUser) {
+                            //kick button 
+                            let kickHim = document.createElement("button");
+                            kickHim.setAttribute("id", data["users"][i]);
+                            kickHim.innerHTML = "Kick";
+                            document.getElementById("userlist").appendChild(kickHim);
+
+                            //ban button 
+                            let banHim = document.createElement("button");
+                            banHim.setAttribute("id", data["users"][i] + "ban");
+                            banHim.innerHTML = "Ban";
+                            document.getElementById("userlist").appendChild(banHim);
+                        }
+                    }
+                    document.getElementById("userlist").innerHTML += '<br>';
+                }
+            }
+
+            //add event listener to kick user 
+            for (let i = 0; i < data["users"].length; i++) {
+                var el = document.getElementById(data["users"][i]);
+                //if not null, add event listener
+                if (el) {
+                    document.getElementById(data["users"][i]).addEventListener("click", function() {
+                        let kickUser = data["users"][i];
+                        socketio.emit("kickUser", {
+                            room: currentRoom,
+                            user: kickUser
+                        })
+                    })
+                }
+            }
+
+            //add event listener to ban user 
+            for (let i = 0; i < data["users"].length; i++) {
+                var el = document.getElementById(data["users"][i] + "ban");
+                //if not null, add event listener
+                if (el) {
+                    document.getElementById(data["users"][i] + "ban").addEventListener("click", function() {
+                        let banUser = data["users"][i];
+                        socketio.emit("banUser", {
+                            room: currentRoom,
+                            user: banUser
+                        })
+                    })
+                }
+            }
+        })
+
+        //after a user receives a kick message 
+        socketio.on("message_to_kicked_user", function(data) {
+            if (currentUser == data['user']) {
+                document.getElementById("chatContainer").style.display = "none"; //hide the chat field 
+                document.getElementById("userList").style.display = "none"; //hide the user list 
+                document.getElementById("leaveRoomContainer").style.display = "none"; //hide the leave room button
+                alert("You've been kicked!")
+                leaveRoom();
+            }
+        })
+
+        //after a user receives a ban message
+        socketio.on("message_to_banned_user", function(data) {
+            if (currentUser == data['user']) {
+                document.getElementById("chatContainer").style.display = "none"; //hide the chat field 
+                document.getElementById("userList").style.display = "none"; //hide the user list 
+                document.getElementById("leaveRoomContainer").style.display = "none"; //hide the leave room button
+                alert("You've been banned from this room!")
+                leaveRoom();
+            }
+        })
+
+        //alert after user recieves DM
+        socketio.on("alertDM", function(data) {
+            if (data['canSend']) {
+                if (currentUser == data['recipient']) {
+                    alert(`Message from ${data['sender']}: ${data['msg']}`);
+                }
+            } else {
+                if (currentUser == data['sender']) {
+                    alert(`Unable to send message. ${data['recipient']} has muted you.`);
+                }
+            }
+        })
+
+        //mute user
+        function mute(button_id) {
+            let otherUser = button_id.substring(2, button_id.length);
+            alert(`${otherUser} is now muted. You will no longer receive direct messages from them.`)
+            let user = currentUser;
+            socketio.emit('mute', {
+                mutedUser: otherUser,
+                me: user
+            })
+        }
+
+        //send DM
+        function sendDM(button_id) {
+            let otherUser = button_id.substring(2, button_id.length);
+            let message = prompt("Please enter a message:");
+            let user = currentUser;
+            socketio.emit('direct_message', {
+                other: otherUser,
+                dm: message,
+                me: currentUser
+            })
+        }
+
+        //send info 
+        function login() {
+            let userName = document.getElementById("username_input").value;
+            document.getElementById("createRoomContainer").style.display = "inline";
+            document.getElementById("roomList").style.display = "inline";
+            document.getElementById("createPrivateRoomContainer").style.display = "inline";
+            document.getElementById("loginContainer").style.display = "none";
+            socketio.emit('login', {
+                user: userName
+            });
+        }
+
+        function createRoom() {
+            document.getElementById("createRoomContainer").style.display = "none";
+            document.getElementById("createPrivateRoomContainer").style.display = "none";
+            document.getElementById("chatContainer").style.display = "inline";
+            document.getElementById("leaveRoomContainer").style.display = "inline";
+            let roomName = document.getElementById("room_input").value;
+            let userName = document.getElementById("username_input").value;
+            document.getElementById("roomList").style.display = "none";
+            socketio.emit('createRoom', {
+                room: roomName,
+                user: userName
+            });
+            currentRoom = roomName;
+            currentUser = userName;
+        }
+
+        function createPrivateRoom() {
+            document.getElementById("createRoomContainer").style.display = "none";
+            document.getElementById("createPrivateRoomContainer").style.display = "none";
+            document.getElementById("chatContainer").style.display = "inline";
+            document.getElementById("leaveRoomContainer").style.display = "inline";
+            let roomName = document.getElementById("private_room_name").value;
+            let userName = document.getElementById("username_input").value;
+            let password = document.getElementById("private_room_pass").value;
+            document.getElementById("roomList").style.display = "none";
+            socketio.emit('createPrivateRoom', {
+                room: roomName,
+                user: userName,
+                pass: password
+            });
+            currentRoom = roomName;
+            currentUser = userName;
+        }
+
+        function leaveRoom() {
+            document.getElementById("chatContainer").style.display = "none";
+            document.getElementById("leaveRoomContainer").style.display = "none";
+            document.getElementById("createRoomContainer").style.display = "inline";
+            document.getElementById("roomList").style.display = "inline";
+            document.getElementById("createPrivateRoomContainer").style.display = "inline";
+            document.getElementById("chatlog").innerHTML = '';
+            document.getElementById("userList").style.display = "none";
+            socketio.emit('leaveRoom', {
+                room: currentRoom,
+                user: currentUser
+            });
+            currentRoom = '';
+        }
+
+        ///send message to server 
+        function sendMessage() {
+            ///get current date and time 
+
+            // https://tecadmin.net/get-current-date-time-javascript/
+
+            var today = new Date();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date + ' ' + time;
+
+            var msg = document.getElementById("message_input").value;
+            var userName = document.getElementById("username_input").value;
+            socketio.emit("message_to_server", {
+                user: userName,
+                message: msg,
+                time: dateTime,
+                room: currentRoom
+            });
+            ///clear message field
+            document.getElementById('message_input').value = '';
+        }
+    </script>
+</head>
+
+<!-- https://ipenywis.com/tutorials/Node.js-Socket.io-Make-a-Basic-Chat-Application-(Native-JS)-03 -->
+
+<body>
+    <div id="roomList" style="display: none;"></div>
+    <div class="container">
+        <div id="loginContainer">
+            <input id="username_input" type="text" placeholder="Enter a Username" />
+            <button id="loginBtn" type="submit" onclick="login()">Start Chatting</button>
+        </div>
+
+        <!-- create room field  (hidden) -->
+        <div id="createRoomContainer" style="display: none;">
+            <input id="room_input" type="text" placeholder="Enter Room Name" />
+            <button id="roomBtn" type="submit" onclick="createRoom()">Create</button>
+        </div><br>
+
+        <!-- create private room field -->
+        <div id="createPrivateRoomContainer" style="display: none;">
+            <input id="private_room_name" type="text" placeholder="Enter Private Room Name" />
+            <input id="private_room_pass" type="password" placeholder="Enter Password" />
+            <button id="privateBtn" type="submit" onclick="createPrivateRoom()">Create Private Room</button>
+        </div>
+
+        <!-- leave room field (hidden) -->
+        <div id="leaveRoomContainer" style="display: none;">
+            <button id="leaveBtn" type="submit" onclick="leaveRoom()">Leave Room</button>
+        </div>
+
+        <!-- user list field (hidden) -->
+        <div id="userList" style="display: none;">
+            <hr>
+            <header>Online users:</header>
+            <div id="userlist"></div>
+        </div>
+
+        <!-- chat msg box (hidden) -->
+        <div id="chatContainer" class="input-container" style="display: none;">
+            <div class="chat-input">
+                <input id="message_input" type="text" placeholder="Enter Message" />
+                <button id="submitBtn" type="submit" class="btn btn-success" onclick="sendMessage()">Send</button>
+                <p>Chat Messages</p>
+            </div>
+        </div>
+    </div>
+    <div id="chatlog"></div>
+</body>
+
+</html>
