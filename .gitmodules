@@ -1,3 +1,27 @@
 [submodule "CSE 237/Final Project/project-flashcard-finley-steve-albert-tom"]
 	path = CSE 237/Final Project/project-flashcard-finley-steve-albert-tom
 	url = https://github.com/CSE237SP2021/project-flashcard-finley-steve-albert-tom.git
+[submodule "CSE 204/10-final-project-individual-finleylee2507"]
+	path = CSE 204/10-final-project-individual-finleylee2507
+	url = https://github.com/wustlcse204/10-final-project-individual-finleylee2507.git
+[submodule "CSE 204/09-todo-react-group-finley-li"]
+	path = CSE 204/09-todo-react-group-finley-li
+	url = https://github.com/wustlcse204/09-todo-react-group-finley-li.git
+[submodule "CSE 204/08-todo-javascript-group-finley-li"]
+	path = CSE 204/08-todo-javascript-group-finley-li
+	url = https://github.com/wustlcse204/08-todo-javascript-group-finley-li.git
+[submodule "CSE 204/07-image-gallery-finleylee2507"]
+	path = CSE 204/07-image-gallery-finleylee2507
+	url = https://github.com/wustlcse204/07-image-gallery-finleylee2507.git
+[submodule "CSE 204/06-brand-redesign-finleylee2507"]
+	path = CSE 204/06-brand-redesign-finleylee2507
+	url = https://github.com/wustlcse204/06-brand-redesign-finleylee2507.git
+[submodule "CSE 204/04-city-guide-css-finleylee2507"]
+	path = CSE 204/04-city-guide-css-finleylee2507
+	url = https://github.com/wustlcse204/04-city-guide-css-finleylee2507.git
+[submodule "CSE 204/03-city-guide-finleylee2507-2"]
+	path = CSE 204/03-city-guide-finleylee2507-2
+	url = https://github.com/wustlcse204/03-city-guide-finleylee2507-2.git
+[submodule "CSE 204/02-personal-biography-finleylee2507"]
+	path = CSE 204/02-personal-biography-finleylee2507
+	url = https://github.com/wustlcse204/02-personal-biography-finleylee2507.git
