@@ -25,3 +25,6 @@
 [submodule "CSE 204/02-personal-biography-finleylee2507"]
 	path = CSE 204/02-personal-biography-finleylee2507
 	url = https://github.com/wustlcse204/02-personal-biography-finleylee2507.git
+[submodule "CSE 204/05-instagram-clone-finleylee2507"]
+	path = CSE 204/05-instagram-clone-finleylee2507
+	url = https://github.com/wustlcse204/05-instagram-clone-finleylee2507.git
